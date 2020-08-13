@@ -1,27 +1,138 @@
 <html>  
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>  
-<title>未定事件簿产品测评和发行盘点</title>  
-<link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">  
-<script type="text/javascript" src="assets/js/jquery.min.js"></script>  
-<script type="text/javascript" src="assets/js/jquery.media.js"></script>  
-<script type="text/javascript">  
-    $(function() {  
-        $('a.media').media({width:800, height:600});  
-        $('a.mediase').media({width:800, height:600});   
-    });  
-</script> 
+  
+<style type="text/css">
+</style>
 
-</head>
-<body>
-<center>
- <div class="panel panel-primary">
-   <div class="panel-heading" align="center">
-      <h2>未定事件簿产品测评和发行盘点</h2>
-   </div>
-   <div class="panel-body">
-	  <a class="media" href="Analysis_Weiding.pdf"></a>  
-   </div>
-</center>
-</body>
+<style type="text/css">
+*{
+margin: 0;
+padding: 0;
+list-style: none;
+}
+.bigbox{
+width:500px;
+height:350px;
+/*border:1px solid #009494;*/
+margin: 0 auto;
+position: relative;
+overflow: hidden;
+}
+.box{
+width:500px;
+height:350px;
+position: absolute;
+top:0px;
+}
+.box a{
+position: absolute;
+}
+.box img{
+width:500px;
+height: 350px;
+position: absolute;
+}
+.bigbox .items{
+width:150px;
+height:15px;
+/*border:1px solid red;*/
+position: absolute;
+bottom: 10px;
+left: 175px;
+z-index: 3;
+}
+.items .item{
+width:15px;
+height:15px;
+background: rgba(255,255,255,0.5);
+border-radius: 50%;
+margin: 0 5px;
+float: left;
+}
+.button{
+width: 500px;
+height: 35px;
+/*border:1px solid #009494;*/
+position: absolute;
+top:45%;
+z-index: 5;
+}
+.button .btn{
+width:25px;
+height: 35px;
+border:none;
+background: rgba(255,255,255,0.5);
+font-size: 35px;
+color: white;
+}
+.fl{
+float: left;
+}
+.fr{
+float: right;
+}
+</style>
+
+<div class="bigbox">
+
+<div class="box">
+<a href="https://d.qq.com/cp/a20200518mxxdl/index_qw.html?adtag=3" style="z-index:1"><img src="{{ site.baseurl }}/assets/images/identity_test.PNG"></a>
+<a href="/jjw0508.github.io/assets/js/web/viewer.html"><img src="{{ site.baseurl }}/assets/images/weiding.png"></a>
+</div>
+
+<ul class="items">
+<li class="item" style="background: #99ffff"></li>
+<li class="item"></li>
+</ul>
+
+<div class="button">
+<button class="btn fl" id="left">&lt;</button>
+<button class="btn fr" id="right">&gt;</button>
+</div>
+
+</div>
+
+<script type="text/javascript" src=""></script>
+<script type="text/javascript">$(function(){
+var num = 0;
+function imgAuto(abc){
+  $("a").hide().eq(num).fadeIn(2000);
+  $(".item").css("background", "rgba(255,255,255,0.5)").eq(num)css("background","#99ffff");
+  if(abc == "r"){
+    num++;
+    if(num == $("a").length){
+      num = 0;
+    }else if(abc =="l"){
+      num--;
+      if(num < 0){
+        num = $("a").length - 1;
+      }
+    }
+  }
+  var move = setInterval(function(){
+    imgAuto("r");
+  },2000)
+  
+$(".item").click(function(){
+  var index = $(this).index();
+  $("a").hide().eq(index).show();
+  $(".item").css("background", "rgba(255,255,255,0.5)").eq(index).css("background","#99ffff");
+  num = index;
+});
+
+$(".bigbox").hover(function(){
+  clearI)nterval(move);
+}, function(){
+  move = setInterval(function(){
+    imgAuto("r");
+  },1000);
+});
+
+$("#left").click(function(){
+  imgAuto("l");
+})
+$("#right").click(function(){
+  imgAuto("r");
+})
+
+})
 </html>
