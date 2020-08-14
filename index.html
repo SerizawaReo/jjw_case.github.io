@@ -137,205 +137,445 @@ $("#right").click(function(){
 })
   </script>
 </html>-->
-<html>
-  <div id="main">
-    <div id="banner">
-      <a href="">
-        <div class="banner-slide dlide1 dlide-active">1</div>
-      </a>
-      
-      <a href="">
-        <div class="banner-slide slide2>2</div>
-      </a>
-  </div>
-                    
-  <div class="dots">
-      <ul id="dots">
-        <li class="li1>1</li>
-        <li>2</li>
-      </ul>
-  </div>
-    
-  <div id="left-right>
-      <div class="move" id="prev">&lsaquo;</div>
-      <div class="move" id="next">&rsaquo;</div>
-  </div>
-                                 
-<style type="text/css">
-	/*二话不说，上来就用通配符删除浏览器默认 值*/
-	*{
-		margin:0;
-		padding: 0;
-	}
-	
-	#main{
-		width: 1200px;
-		height: 600px;
-		position: relative;
-		margin: 50px auto;/*为了在此的观看效果，我选择了这个数据*/
-		overflow: hidden;/*因为设置了隐藏，所示的效果只有一张solid1*/
-		/*可在元素赠加和定位完成后进行影藏*/
-	}
-	/*
-	 * 为所以图片设置同main一样宽高不大推荐
-	 	因为，如果图片没进行过处理，强制改变宽高，容易产生变形，
-	 	图片将变得难看。
-	 * *//*为了使图片叠加所以我们使用absolute，在此之前
-	 * 	我们需要去它的父级添加一个relative。
-	 * */
-	#main .banner-slide{
-		position: absolute;
-		width: 1200px;
-		height: 600px; 
-		overflow: hidden;/*防止图片过大，超出范围，影响视觉*/
-		display:none;
-	}
-	#main .slide-active{
-		display: block;
-	}
-	/*
-	 * 挨个设置轮播图的图片
-	 * 为了方便在图片所在div加内容，标签
-	 * 我们选择把轮播图内容以background形式出现。
-	 */
-	#main .slide1{
-		background: red;
-	}
-	#main .slide2{
-		background: yellow;
-	}
-	#main .slide3{
-		background: blue;
-	}
-	#main .slide4{
-		background: green;
-	}
-	#main .slide5{
-		background: deepskyblue;
-	}
-	/*ul标签的移动*/
-	#main .dots #dots{
-		position: absolute;
-		margin-top: 560px;/*由于我设置了li高为40，总高600，所以进行
-		560的移动*/
-		margin-left: 275px;/*(1200-5*130)/2*/
-	}
-	#main .dots #dots li{
-		height: 40px;
-		width: 80px;
-		border-radius: 20%;
-		background: gray;/*在此的样式根据个人喜好自己添加*/
-		/*由于上面的定位，所以*/
-		float: left;/*为了是图标自左向右*/
-		margin-left: 50px;
-		list-style: none;
-	}
-	#main .dots #dots .li1{
-		background: blue;
-	}
-	#main #left-right .move{
-		position: absolute;
-		margin-top:260px;
-		height: 80px;
-		width: 40px;
-		font-size: 50px;/*设置<>大小*/
-		padding-left: 10px ;
-	}
-	/*左右分离*/
-	#main #left-right #next{
-		right:0;
-	}
-	/*触碰上下张有效果*/
-	#main #left-right .move:hover{
-		background: rgba(0,0,0,0.4);
-	}
-	
-<script type="text/javascript>
-//因为之前使用了很多的id，所以我们为了方便得到
-//所需的document.getElementById();,做一个封装函数（我是网上看来觉得挺好的)
-	function byid(id){
-		return typeof(id)==='string'?document.getElementById(id):id;
-	//	相当于 return if(typeof(id)==='string'){
-	//		document.getElementById(id);
-	//	}else{
-	//		id;
-	//	}
-	}
-	//接下来开始轮播图脚本了。
-	//为了使得函数很多变量能互相使用，所以我们需要在wai
-	//定义好全局变量。
-	//len的设定   ：  由于长度上的计算很少，而且图片和数字移动数量相同，只需设置一个
-	// index的设定：  设置记数变量，因为数字从0开始计算。
-	var main = byid('main'),
-		pics = byid('banner').getElementsByTagName('div'),
-		dots = byid('dots').getElementsByTagName('li'),
-		prev = byid('prev'),
-		next = byid('next'),
-		len = pics.length,
-		index = 0,
-		timer = null;//timer是为了进行定时器的设置挺与开
-	//定时器的关注
-	function solide(){
-		//轮播定时器（是整个容器即main）：移入鼠标停止，和移出继续轮播
-		//先来个划入清除定时器
-		banner.onmouseover=function(){
-			if(timer){//即timer不为null，为真
-				clearInterval(timer);//清除setinterval，并且此时timer又为false，不过，随着循环（即师表
-				//移开banner，循环继续又变回 setinterval。
-			}
-		}
-		//再写一个划出继续启动定时器
-		banner.onmouseout = function(){
-			timer = setInterval(function(){
-				index++;
-				if(index>=len){
-					index=0;
-				}//注意因为index表示的是图片的标号，最大为4！！
-				//有了index就可以进行轮播了，可是我们没有执行图片变化的番薯
-				//设置一个，在全局作用域中。
-				changImg();
-			},3000);//setInterval为延时不停息的执行
-		}
-		banner.onmouseout();//这样子直接运行function，可以不用在鼠标移出才进行，进入页面同时就开始轮播
-		//接下来我们开始数字下标绑定图片移动；
-		for(var j=0;j<len;j++){
-			//在开始前，我们需要知道，函数是可以独立作用域之外的。
-			dots[j].index=j;//为所以dots属性添加id，分别为0，1，2，3，4。
-			//不太推荐使用这样，毕竟id名字取数字开头不好，不太合规矩。
-			dots[j].onclick = function(){
-				index = this.index;//(引用id的是dots,及dots的id);
-				changImg();
-			}
-		}
-		//然后是上、下一张
-		prev.onclick = function(){
-			index--;
-			if(index<0){
-				index=len-1;
-			}
-			changImg();
-		}
-		next.onclick = function(){
-			index++;
-			if(index>=len){
-				index=0;
-			}
-			changImg();
-		}
-	}
-	solide();//提前写上，开始方法，才有轮播效果
-	//图片自动切换
-	function changImg(){
-		for(var i=0;i<len;i++){
-			pics[i].style.display='none';
-			dots[i].className="";
-		}
-		pics[index].style.display='block';
-		dots[index].className='li1';
-	}
 
-
-</script>
-
+<!DOCTYPE html>
+ 
+<html lang="en">
+ 
+<head>
+ 
+<meta charset="UTF-8">
+ 
+<title>Title</title>
+ 
+<style>
+ 
+#banner{
+ 
+width: 1000px;
+ 
+height: 500px;
+ 
+margin: 10px auto;
+ 
+}
+ 
+#content{
+ 
+width: 1000px;
+ 
+height: 500px;
+ 
+overflow: hidden;
+ 
+position: relative;
+ 
+}
+ 
+#ul{
+ 
+height: 500px;
+ 
+position: absolute;
+ 
+left: 0;
+ 
+}
+ 
+#ul li{
+ 
+list-style: none;
+ 
+width: 1000px;
+ 
+height: 500px;
+ 
+float: left;
+ 
+}
+ 
+#ul img{
+ 
+width: 1000px;
+ 
+height: 500px;
+ 
+}
+ 
+.b{
+ 
+width: 100px;
+ 
+height: 100px;
+ 
+position: absolute;
+ 
+cursor: pointer;
+ 
+}
+ 
+.b img{
+ 
+width: 100px;
+ 
+height: 100px;
+ 
+}
+ 
+#left{
+ 
+top: 200px;
+ 
+left: 50px;
+ 
+}
+ 
+#right{
+ 
+top: 200px;
+ 
+right: 50px;
+ 
+}
+ 
+#dotul{
+ 
+width: 500px;
+ 
+position: relative;
+ 
+left: 280px;
+ 
+top: 450px;
+ 
+}
+ 
+#dotul li{
+ 
+list-style: none;
+ 
+float: left;
+ 
+width: 20px;
+ 
+height: 20px;
+ 
+border-radius: 20px;
+ 
+background-color: seagreen;
+ 
+margin-left: 20px;
+ 
+cursor: pointer;
+ 
+}
+ 
+.active{
+ 
+background-color: orangered !important;
+ 
+}
+ 
 </style>
+ 
+</head>
+ 
+<body>
+ 
+<div id="banner">
+ 
+<div id="content">
+ 
+<ul id="ul">
+ 
+<li><a href="https://d.qq.com/cp/a20200518mxxdl/index_qw.html?adtag=3"><img src="/jjw_case.github.io/assets/images/mengxiangxindalu.png" /></a> </li>
+ 
+<li><a href="/jjw0508.github.io/assets/js/web/viewer.html"><img src="/jjw_case.github.io/assets/images/Weiding_ceping.png" /></a> </li>
+ 
+</ul>
+ 
+<div class="dot" id="dot">
+ 
+<ul id="dotul">
+ 
+<li></li>
+ 
+<li></li>
+ 
+<li></li>
+ 
+<li></li>
+ 
+<li></li>
+ 
+<li></li>
+ 
+<li></li>
+ 
+<li></li>
+ 
+<li></li>
+ 
+<li></li>
+ 
+</ul>
+ 
+</div>
+ 
+</div>
+ 
+<div id="btn">
+ 
+<!--<div id="left" class="b"><img src="img/prev.png"/></div>
+ 
+<div id="right" class="b"><img src="img/next.png"/></div>-->
+	
+<div id="left" class="b"><img src="img/prev.png"/></div>
+ 
+<div id="right" class="b"><img src="img/next.png"/></div>
+ 
+</div>
+ 
+</div>
+ 
+<script type="text/javascript">
+ 
+//定义所有需要用到的数据
+ 
+var animationSpeed = 1;//一次切换的图片数（就是下一张图片的间隔）
+ 
+var minSpeed = 5;//就是每次left增加或减少的数
+ 
+var stopTime = 5000;//要隔多少秒开始切换下一张图片
+ 
+//页面元素
+ 
+var prev = document.getElementById("left");
+ 
+var next = document.getElementById("right");
+ 
+var banner = document.getElementById("banner");
+ 
+var content = document.getElementById("content");
+ 
+var imgul = document.getElementById("ul");
+ 
+var imgli = document.getElementById("ul").getElementsByTagName("li");
+ 
+var liwidth = document.getElementById("ul").getElementsByTagName("li")[0].offsetWidth;
+ 
+var dot = document.getElementById("dot");
+ 
+var dotul = document.getElementById("dotul");
+ 
+var dotli = document.getElementById("dotul").getElementsByTagName('li');
+ 
+var length = document.getElementById("dotul").getElementsByTagName('li').length;
+ 
+var type = true;//是否可以渲染
+ 
+var nextTimer = null;
+ 
+var prevTimer = null;
+ 
+var mainTimer = null;
+ 
+ 
+ 
+imgul.style.width = liwidth*length+"px";//将ul的宽度设置为所有照片宽度的总和
+ 
+//给每一个dotli添加一个index属性，方便改变小圆点的背景颜色
+ 
+for (var i = 0;i<length;i++){
+ 
+imgli[i].index = i;
+ 
+dotli[i].index = i;
+ 
+}
+ 
+//给第一个小圆点加上背景
+ 
+changeColor(imgli[0]);
+ 
+next.onclick = function (ev) {
+ 
+if (type){
+ 
+liwidth = 0;
+ 
+clearInterval(nextTimer);//先把上一次留下来的定时器清除（确保清除干净—）
+ 
+nextTimer = setInterval(nextImg,animationSpeed);
+ 
+type = false;
+ 
+changeColor(imgli[1]);//改变原点颜色
+ 
+}
+ 
+};
+ 
+function nextImg() {
+ 
+imgul.style.left = "-"+liwidth+"px";
+ 
+liwidth += minSpeed;
+ 
+if (liwidth >= imgli[0].offsetWidth){
+ 
+clearInterval(nextTimer);
+ 
+imgul.appendChild(imgli[0]);//先删除imgli[0],然后加到末尾来，这样实现了循环
+ 
+imgul.style.left = 0;
+ 
+type = true;
+ 
+}
+ 
+}
+ 
+prev.onclick = function (ev) {
+ 
+if (type){//如果可以渲染
+ 
+imgul.insertBefore(imgli[length-1],imgli[0]);//因为当前图片的位置一直都是imgli[0]，所以按照循环的思想，上一张就是imli[length-1]
+ 
+clearInterval(prevTimer);
+ 
+liwidth = imgli[0].offsetWidth;
+ 
+prevTimer = setInterval(prevImg,animationSpeed);
+ 
+type = false;//因为设置了定时器，定时器在渲染，所以这时不能被渲染
+ 
+changeColor(imgli[1]);//改变原点颜色
+ 
+}
+ 
+};
+ 
+ 
+ 
+function prevImg() {
+ 
+imgul.style.left = "-"+liwidth+"px";
+ 
+liwidth -= minSpeed;
+ 
+if (liwidth <=-1){
+ 
+clearInterval(prevTimer);
+ 
+imgul.style.left = 0;
+ 
+type = true;//定时器已经完成渲染了，所以此时可以渲染
+ 
+}
+ 
+}
+ 
+mainTimer = setInterval(next.onclick,5000);
+ 
+ 
+ 
+function changeColor(target) {
+ 
+for (var j = 0;j<length;j++){
+ 
+dotli[j].className = "";
+ 
+}
+ 
+dotli[target.index].className = "active";
+ 
+}
+ 
+ 
+ 
+//为每个小圆点添加点击事件
+ 
+dot.onclick = function(ev){
+ 
+var ev = ev || window.event;
+ 
+var target = ev.target || ev.srcElement;
+ 
+if(target.nodeName.toLowerCase() == "li"){
+ 
+if(type){
+ 
+showImg(target.index);
+ 
+changeColor(target);
+ 
+type = true;
+ 
+}
+ 
+}
+ 
+};
+ 
+//根据参数显示对应的图片。
+ 
+function showImg(inde){
+ 
+var this_li = imgli[0].index;
+ 
+ 
+ 
+//把第一个元素放到最后面。
+ 
+if(inde>this_li){
+ 
+var x = inde-this_li;
+ 
+for(var y = 0;y<x;y++){
+ 
+imgul.appendChild(imgli[0]);
+ 
+}
+ 
+}
+ 
+ 
+ 
+//把最后一个元素放到第一的位置
+ 
+if(inde<this_li){
+ 
+var x_x = this_li-inde;
+ 
+for(var g = 0;g<x_x;g++){
+ 
+imgul.insertBefore(imgli[length-1],imgli[0]);
+ 
+}
+ 
+}
+ 
+}
+ 
+ 
+ 
+//当鼠标移入图片区域时，清除定时器。鼠标移出时恢复定时器
+ 
+content.onmouseover = function (ev) {
+ 
+  clearInterval(mainTimer);
+ 
+};
+ 
+content.onmouseout = function (ev) {
+ 
+  mainTimer = setInterval(next.onclick,stopTime);
+ 
+};
+ 
+</script>
+ 
+</body>
+ 
 </html>
